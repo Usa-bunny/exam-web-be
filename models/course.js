@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      User.belongsToMany(models.User, {
+      Course.belongsToMany(models.User, {
         through: models.CourseUser,
         foreignKey: "user_id",
         otherKey: "course_id",
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      User.belongsToMany(models.User, {
+      Course.belongsToMany(models.User, {
         through: models.CourseUser,
         foreignKey: "user_id",
         otherKey: "course_id",

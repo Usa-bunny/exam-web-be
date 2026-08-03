@@ -1,9 +1,17 @@
+require("dotenv").config();
+
 const express = require("express");
 import type { Express, Request, Response } from "express";
 const db = require("../models");
+const routes = require("./route");
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(routes);
 
 async function startServer() {
   try {

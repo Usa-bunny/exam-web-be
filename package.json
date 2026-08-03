@@ -6,15 +6,17 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "migrate": "npx sequelize-cli db:migrate"
+    "migrate": "npx sequelize-cli db:migrate",
+    "seeder": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
-  "author": "",
+  "author": "usagi",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.23.2",
     "sequelize": "^6.37.8"
@@ -26,5 +28,13 @@
     "sequelize-cli": "^6.6.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Usa-bunny/exam-web-be.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Usa-bunny/exam-web-be/issues"
+  },
+  "homepage": "https://github.com/Usa-bunny/exam-web-be#readme"
 }
