@@ -1,6 +1,7 @@
 const { body } = require("express-validator");
+import type { ValidationChain } from "express-validator";
 
-const loginValidator: any = [
+const loginValidator: ValidationChain[] = [
   body("email")
     .notEmpty()
     .withMessage("Email must be fill")
@@ -13,4 +14,4 @@ const loginValidator: any = [
     .withMessage("Password minimal must have 6 character"),
 ];
 
-module.exports = { loginValidator };
+module.exports = loginValidator;

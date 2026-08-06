@@ -1,8 +1,10 @@
+import type { Response } from "express";
+
 const successResponse = (
-  res: any,
-  status = 200,
-  message: any,
-  data = null,
+  res: Response,
+  status: number = 200,
+  message: string,
+  data: any = null,
 ) => {
   return res.status(status).json({
     success: true,
@@ -13,10 +15,10 @@ const successResponse = (
 };
 
 const errorResponse = (
-  res: any,
-  status: any,
-  message: any,
-  errors = null,
+  res: Response,
+  status: number = 500,
+  message: string,
+  errors: any = null,
 ) => {
   return res.status(status).json({
     success: false,

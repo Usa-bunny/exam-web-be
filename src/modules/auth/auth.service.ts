@@ -5,11 +5,11 @@ const { User } = require("../../../models");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 class AuthService {
-  async login({ email, password }: { email: string; password: string }) {
-    const user = await User.findOne({ where: { email } });
+  async login(data: { email: string; password: string }) {
+    const user = await User.findOne({ where: { email: data.email } });
     if (!user) throw new Error("Email not found");
 
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(data.password, user.password);
     if (!isPasswordMatch) throw new Error("Password is incorrect");
 
     const token = jwt.sign(
@@ -18,7 +18,7 @@ class AuthService {
       { expiresIn: "1d" },
     );
 
-    const { password: _, ...userData } = user.toJSON();
+    const { password, ...userData } = user.toJSON();
 
     return {
       user: userData,
