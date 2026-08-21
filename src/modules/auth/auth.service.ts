@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 class AuthService {
   async login(data: { email: string; password: string }) {
     const user = await User.findOne({ where: { email: data.email } });
-    if (!user) throw new Error("Email not found");
+    if (!user) throw new Error("Invalid email or password");
 
     const isPasswordMatch = await bcrypt.compare(data.password, user.password);
     if (!isPasswordMatch) throw new Error("Password is incorrect");

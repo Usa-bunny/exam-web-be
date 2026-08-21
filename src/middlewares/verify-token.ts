@@ -3,11 +3,15 @@ const { errorResponse } = require("../helpers/response");
 const JWT_SECRET = process.env.JWT_SECRET;
 import type { Request, Response, NextFunction } from "express";
 
-interface AuthenticatedRequest extends Request {
-  user?: any; 
+interface RequestWithUser extends Request {
+  user?: any;
 }
 
-const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+const verifyToken = (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction,
+) => {
   if (req.method === "OPTIONS") return next();
 
   try {
@@ -24,7 +28,7 @@ const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunctio
     const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded ;
+    req.user = decoded;
     next();
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {

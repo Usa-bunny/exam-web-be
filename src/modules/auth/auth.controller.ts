@@ -11,14 +11,9 @@ class AuthController {
 
       return successResponse(res, 200, "Login success", result);
     } catch (error: any) {
-      return errorResponse(
-        res,
-        error.statusCode || 500,
-        error.message,
-        error.errors,
-      );
+      return errorResponse(res, error.statusCode, error.message, error.errors);
     }
   }
 }
-
+ 
 module.exports = new AuthController();

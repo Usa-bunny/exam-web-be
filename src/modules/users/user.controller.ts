@@ -14,9 +14,9 @@ class UsersController {
         role,
       });
 
-      return successResponse(res, 201, "Success creating user", user);
+      return successResponse(res, 201, "Success create user", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode || 500, error.message);
+      return errorResponse(res, error.statusCode, error.message);
     }
   }
 
@@ -26,9 +26,9 @@ class UsersController {
 
       const users = await UsersService.getAll(query);
 
-      return successResponse(res, 200, "Success getting users list", users);
+      return successResponse(res, 200, "Success get users list", users);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode || 500, error.message);
+      return errorResponse(res, error.statusCode, error.message);
     }
   }
 
@@ -38,9 +38,9 @@ class UsersController {
 
       const user = await UsersService.getById(id);
 
-      return successResponse(res, 200, "Success getting user detail", user);
+      return successResponse(res, 200, "Success get user detail", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode || 500, error.message);
+      return errorResponse(res, error.statusCode, error.message);
     }
   }
 
@@ -59,7 +59,7 @@ class UsersController {
 
       return successResponse(res, 200, "Success update user", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode || 500, error.message);
+      return errorResponse(res, error.statusCode, error.message);
     }
   }
 
@@ -69,9 +69,9 @@ class UsersController {
 
       await UsersService.delete(id);
 
-      return successResponse(res, 200, "Success delete user", null);
+      return successResponse(res, 200, "Success delete user");
     } catch (error: any) {
-      return errorResponse(res, error.statusCode || 500, error.message);
+      return errorResponse(res, error.statusCode, error.message);
     }
   }
 }
