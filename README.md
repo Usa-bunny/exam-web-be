@@ -11,7 +11,7 @@ This project using Express js
 1. Clone the repository:
 ~~~bash
 git clone https://github.com/Usa-bunny/exam-web-be.git
-cd Guest-number-game
+cd exam-web-be
 ~~~
 2. Setup
 ```bash
