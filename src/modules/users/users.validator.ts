@@ -1,5 +1,4 @@
 const { body } = require("express-validator");
-const { User } = require("../../../models");
 import type { ValidationChain } from "express-validator";
 
 const createUserValidator: ValidationChain[] = [
