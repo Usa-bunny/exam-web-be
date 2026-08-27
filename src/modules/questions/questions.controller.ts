@@ -1,4 +1,4 @@
-const QuestionService = require("./question.service");
+const QuestionService = require("./questions.service");
 const { successResponse, errorResponse } = require("../../helpers/response");
 import type { Request, Response } from "express";
 
