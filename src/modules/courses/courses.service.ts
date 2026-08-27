@@ -138,7 +138,7 @@ class CoursesService {
   }
 
   async getById(id: any) {
-    const course = await Course.findByPk(id, {
+    const courses = await Course.findByPk(id, {
       include: [
         {
           model: User,
@@ -165,9 +165,9 @@ class CoursesService {
       ],
     });
 
-    if (!course) throw new Error("Course not found");
+    if (!courses) throw new Error("Course not found");
 
-    const data = course.toJSON();
+    const data = courses.toJSON();
 
     return {
       ...data,

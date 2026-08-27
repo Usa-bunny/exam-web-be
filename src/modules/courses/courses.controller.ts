@@ -22,7 +22,8 @@ class CoursesController {
 
       return successResponse(res, 201, "Success create course", course);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "Teacher not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -33,7 +34,7 @@ class CoursesController {
 
       return successResponse(res, 200, "Success get list course", courses);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      return errorResponse(res, 500, error.message);
     }
   }
 
@@ -44,7 +45,8 @@ class CoursesController {
 
       return successResponse(res, 200, "Success get details course", course);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "Course not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -62,7 +64,12 @@ class CoursesController {
 
       return successResponse(res, 200, "Succes update course", course);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status =
+        error.message === "Teacher not found" ||
+        error.message === "Course not found"
+          ? 404
+          : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -74,7 +81,8 @@ class CoursesController {
 
       return successResponse(res, 200, "Success delete course");
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "Course not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -86,7 +94,7 @@ class CoursesController {
 
       return successResponse(res, 200, "Success get details course", courses);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      return errorResponse(res, 500, error.message);
     }
   }
 }

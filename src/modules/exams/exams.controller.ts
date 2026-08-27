@@ -1,6 +1,6 @@
 const ExamsService = require("./exams.service");
 const { successResponse, errorResponse } = require("../../helpers/response");
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 
 interface RequestWithUser extends Request {
   user?: any;
@@ -133,6 +133,18 @@ class ExamsController {
     } catch (error: any) {
       const status = error.message === "Exam not found" ? 404 : 500;
       return errorResponse(res, status, error.message);
+    }
+  }
+
+  async getMyExams(req: RequestWithUser, res: Response, next: NextFunction) {
+    try {
+      const query = req.query;
+      const user_id = req.user.id;
+      const result = await ExamsService.getMyExams(query, user_id);
+
+      return successResponse(res, 200, "Success get list my exam", result);
+    } catch (error: any) {
+      return errorResponse(res, 500, error.message);
     }
   }
 }

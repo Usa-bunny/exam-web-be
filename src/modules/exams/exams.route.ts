@@ -10,7 +10,11 @@ const validate = require("../../middlewares/validate");
 const verifyToken = require("../../middlewares/verify-token");
 const checkRole = require("../../middlewares/check-role");
 
-router.use(verifyToken, checkRole("teacher"));
+router.use(verifyToken);
+
+router.get("/my-exams", checkRole("student"), ExamsController.getMyExams);
+
+router.use(checkRole("teacher"));
 
 router.post("/", createExamValidator, validate, ExamsController.create);
 router.get("/", ExamsController.getAll);
