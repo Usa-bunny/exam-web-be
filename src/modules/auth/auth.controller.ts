@@ -11,7 +11,8 @@ class AuthController {
 
       return successResponse(res, 200, "Login success", result);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message, error.errors);
+      const status = error.message === "Invalid email or password" ? 401 : (error.statusCode || 500);
+      return errorResponse(res, status, error.message, error.errors);
     }
   }
 }

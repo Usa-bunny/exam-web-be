@@ -16,7 +16,8 @@ class UsersController {
 
       return successResponse(res, 201, "Success create user", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "Email Already Used" ? 400 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -40,7 +41,8 @@ class UsersController {
 
       return successResponse(res, 200, "Success get user detail", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "User not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -59,7 +61,8 @@ class UsersController {
 
       return successResponse(res, 200, "Success update user", user);
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "User not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 
@@ -71,7 +74,8 @@ class UsersController {
 
       return successResponse(res, 200, "Success delete user");
     } catch (error: any) {
-      return errorResponse(res, error.statusCode, error.message);
+      const status = error.message === "User not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
     }
   }
 }

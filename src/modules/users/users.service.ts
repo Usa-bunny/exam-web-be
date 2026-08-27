@@ -76,6 +76,11 @@ class UsersService {
 
     const updateData = { ...data };
 
+    if (data.email && data.email !== user.email) {
+      const existingEmail = await User.findOne({ where: { email: data.email } });
+      if (existingEmail) throw new Error("Email Already Used");
+    }
+
     if (data.password) {
       updateData.password = await bcrypt.hash(data.password, 10);
     }

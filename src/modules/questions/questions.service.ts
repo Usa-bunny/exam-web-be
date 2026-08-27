@@ -5,7 +5,7 @@ const {
   buildSearchCondition,
 } = require("../../helpers/pagination");
 
-class QuestionService {
+class QuestionsService {
   async create(data: any) {
     const course = await Course.findByPk(data.course_id);
 
@@ -180,4 +180,4 @@ class QuestionService {
   }
 }
 
-module.exports = new QuestionService();
+module.exports = new QuestionsService();

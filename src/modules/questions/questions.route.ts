@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const QuestionController = require("./questions.controller");
+const QuestionsController = require("./questions.controller");
 const {
   createQuestionValidator,
   updateQuestionValidator,
@@ -11,15 +11,15 @@ const checkRole = require("../../middlewares/check-role");
 
 router.use(verifyToken, checkRole("teacher"));
 
-router.post("/", createQuestionValidator, validate, QuestionController.create);
-router.get("/course/:course_id", QuestionController.getByCourseId);
-router.get("/:id", QuestionController.getById);
+router.post("/", createQuestionValidator, validate, QuestionsController.create);
+router.get("/course/:course_id", QuestionsController.getByCourseId);
+router.get("/:id", QuestionsController.getById);
 router.put(
   "/:id",
   updateQuestionValidator,
   validate,
-  QuestionController.update,
+  QuestionsController.update,
 );
-router.delete("/:id", QuestionController.delete);
+router.delete("/:id", QuestionsController.delete);
 
 module.exports = router;

@@ -10,7 +10,7 @@ class AuthService {
     if (!user) throw new Error("Invalid email or password");
 
     const isPasswordMatch = await bcrypt.compare(data.password, user.password);
-    if (!isPasswordMatch) throw new Error("Password is incorrect");
+    if (!isPasswordMatch) throw new Error("Invalid email or password");
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },

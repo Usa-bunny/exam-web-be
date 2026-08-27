@@ -1,4 +1,4 @@
-const QuestionService = require("./questions.service");
+const QuestionsService = require("./questions.service");
 const { successResponse, errorResponse } = require("../../helpers/response");
 import type { Request, Response } from "express";
 
@@ -6,13 +6,13 @@ interface RequestWithUser extends Request {
   user?: any;
 }
 
-class QuestionController {
+class QuestionsController {
   async create(req: RequestWithUser, res: Response) {
     try {
       const { question_text, type, options, course_id } = req.body;
       const user_id = req.user.id;
 
-      const question = await QuestionService.create({
+      const question = await QuestionsService.create({
         question_text,
         type,
         options,
@@ -31,7 +31,7 @@ class QuestionController {
       const { course_id } = req.params;
       const user_id = req.user.id;
 
-      const data = await QuestionService.getByCourseId(
+      const data = await QuestionsService.getByCourseId(
         course_id,
         req.query,
         user_id,
@@ -48,7 +48,7 @@ class QuestionController {
       const { id } = req.params;
       const user_id = req.user.id;
 
-      const question = await QuestionService.getById(id, user_id);
+      const question = await QuestionsService.getById(id, user_id);
 
       return successResponse(res, 200, "Success get question detail", question);
     } catch (error: any) {
@@ -63,7 +63,7 @@ class QuestionController {
       const { question_text, type, options } = req.body;
       const user_id = req.user.id;
 
-      const question = await QuestionService.update(id, {
+      const question = await QuestionsService.update(id, {
         question_text,
         type,
         options,
@@ -82,7 +82,7 @@ class QuestionController {
       const { id } = req.params;
       const user_id = req.user.id;
 
-      await QuestionService.delete(id, user_id);
+      await QuestionsService.delete(id, user_id);
 
       return successResponse(res, 200, "Success delete question");
     } catch (error: any) {
@@ -92,4 +92,4 @@ class QuestionController {
   }
 }
 
-module.exports = new QuestionController();
+module.exports = new QuestionsController();
