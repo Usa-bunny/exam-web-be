@@ -80,11 +80,33 @@ const updateExamValidator: ValidationChain[] = [
     .isISO8601()
     .withMessage("format end_time is (YYYY-MM-DD HH:mm:ss)")
     .custom((value: any, { req }: { req: Request }) => {
-      if (req.body.start_time && new Date(value) <= new Date(req.body.start_time))
+      if (
+        req.body.start_time &&
+        new Date(value) <= new Date(req.body.start_time)
+      )
         throw new Error("end_time must be after the start time");
 
       return true;
     }),
 ];
 
-module.exports = { createExamValidator, updateExamValidator };
+const assignQuestionsValidator: ValidationChain[] = [
+  body("question_ids")
+    .notEmpty()
+    .withMessage("question_ids is required")
+    .isArray({ min: 1 })
+    .withMessage("question_ids must be a non-empty array")
+    .custom((value: any) => {
+      // Pastikan semua isi array adalah angka (ID valid)
+      if (!value.every(Number.isInteger)) {
+        throw new Error("All items in question_ids must be integers");
+      }
+      return true;
+    }),
+];
+
+module.exports = {
+  createExamValidator,
+  updateExamValidator,
+  assignQuestionsValidator,
+};

@@ -71,25 +71,66 @@ class ExamsController {
         duration,
         start_time,
         end_time,
-        created_by: user_id
-      })
+        created_by: user_id,
+      });
 
-      return successResponse(res, 200, "Success update exam", exam)
+      return successResponse(res, 200, "Success update exam", exam);
     } catch (error: any) {
       const status = error.message === "Course not found" ? 404 : 500;
       return errorResponse(res, status, error.message);
     }
   }
 
-  async delete(req:RequestWithUser, res:Response){
+  async delete(req: RequestWithUser, res: Response) {
     try {
-      const {exam_id} = req.params;
+      const { exam_id } = req.params;
       const user_id = req.user.id;
 
-      await ExamsService.delete(exam_id, user_id)
+      await ExamsService.delete(exam_id, user_id);
 
-      return successResponse(res, 200, "Success delete exam")
-    } catch (error:any) {
+      return successResponse(res, 200, "Success delete exam");
+    } catch (error: any) {
+      const status = error.message === "Exam not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
+    }
+  }
+
+  async assignQuestions(req: RequestWithUser, res: Response) {
+    try {
+      const { question_ids } = req.body;
+      const { exam_id } = req.params;
+      const user_id = req.user.id;
+      const questions = await ExamsService.assignQuestions(
+        exam_id,
+        question_ids,
+        user_id,
+      );
+
+      return successResponse(
+        res,
+        200,
+        "Success update exam_question",
+        questions,
+      );
+    } catch (error: any) {
+      const status = error.message === "Exam not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
+    }
+  }
+
+  async getAssignQuestions(req: RequestWithUser, res: Response) {
+    try {
+      const { exam_id } = req.params;
+      const user_id = req.user.id;
+      const questions = await ExamsService.getAssignQuestions(exam_id, user_id);
+
+      return successResponse(
+        res,
+        200,
+        "Success get list exam_question",
+        questions,
+      );
+    } catch (error: any) {
       const status = error.message === "Exam not found" ? 404 : 500;
       return errorResponse(res, status, error.message);
     }
