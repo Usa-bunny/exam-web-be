@@ -13,6 +13,12 @@ const checkRole = require("../../middlewares/check-role");
 router.use(verifyToken);
 
 router.get("/my-exams", checkRole("student"), ExamsController.getMyExams);
+router.get("/active", checkRole("admin"), ExamsController.getActiveExams);
+router.get(
+  "/monitor/:exam_id",
+  checkRole("admin"),
+  ExamsController.getExamMonitor,
+);
 
 router.use(checkRole("teacher"));
 

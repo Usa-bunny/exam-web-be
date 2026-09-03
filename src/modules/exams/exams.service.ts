@@ -1,4 +1,5 @@
 const {
+  User,
   Exam,
   Course,
   Question,
@@ -322,6 +323,91 @@ class ExamsService {
     return {
       data,
       pagination: formatPagination(totalData, limit, page),
+    };
+  }
+
+  async getActiveExams() {
+    const now = new Date();
+
+    return await Exam.findAll({
+      attributes: [
+        "id",
+        "course_id",
+        "title",
+        "description",
+        "start_time",
+        "end_time",
+      ],
+      where: {
+        start_time: {
+          [Op.lte]: now,
+        },
+        end_time: {
+          [Op.gte]: now,
+        },
+      },
+      include: [
+        {
+          model: Course,
+          as: "course",
+          attributes: ["id", "title"],
+        },
+      ],
+      order: [["start_time", "ASC"]],
+    });
+  }
+
+  async getExamAttempts(exam_id: any, query: any = {}) {
+    const { page, limit, offset } = getPaginationParams(query);
+
+    const { rows, count } = await ExamAttempt.findAndCountAll({
+      where: { exam_id },
+      attributes: ["id", "start_time", "end_time", "status", "score"],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "name", "email"],
+        },
+      ],
+      limit,
+      offset,
+      order: [["start_time", "DESC"]],
+    });
+
+    return {
+      data: rows,
+      pagination: formatPagination(count, limit, page),
+    };
+  }
+
+  async getExamMonitor(exam_id: any, query: any = {}) {
+    const exam = await Exam.findByPk(exam_id, {
+      attributes: [
+        "id",
+        "course_id",
+        "title",
+        "description",
+        "start_time",
+        "end_time",
+      ],
+      include: [
+        {
+          model: Course,
+          as: "course",
+          attributes: ["id", "title"],
+        },
+      ],
+    });
+
+    if (!exam) throw new Error("Exam not found");
+
+    const attempts = await this.getExamAttempts(exam_id, query);
+
+    return {
+      ...exam.toJSON(),
+      attempts: attempts.data,
+      pagination: attempts.pagination,
     };
   }
 }

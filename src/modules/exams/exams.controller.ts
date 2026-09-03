@@ -147,6 +147,30 @@ class ExamsController {
       return errorResponse(res, 500, error.message);
     }
   }
+
+  async getActiveExams(req: Request, res: Response) {
+    try {
+      const result = await ExamsService.getActiveExams();
+
+      return successResponse(res, 200, "Success get Active Exams", result);
+    } catch (error: any) {
+      return errorResponse(res, 500, error.message);
+    }
+  }
+
+  async getExamMonitor(req: Request, res: Response) {
+    try {
+      const exam_id = req.params.exam_id;
+      const query = req.query;
+
+      const result = await ExamsService.getExamMonitor(exam_id, query);
+
+      return successResponse(res, 200, "Success get Exam Monitor Data", result);
+    } catch (error: any) {
+      const status = error.message === "Exam not found" ? 404 : 500;
+      return errorResponse(res, status, error.message);
+    }
+  }
 }
 
 module.exports = new ExamsController();

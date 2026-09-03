@@ -14,6 +14,7 @@ const {
   formatPagination,
   buildSearchCondition,
 } = require("../../helpers/pagination");
+const socket = require("../../socket");
 
 class ExamAttemptsService {
   async getExamDetailForStudent(exam_id: any, user_id: any) {
@@ -179,7 +180,8 @@ class ExamAttemptsService {
     if (now < new Date(exam.start_time))
       throw new Error("Exam has not started yet");
 
-    if (now > new Date(exam.end_time)) throw new Error("Exam has already ended");
+    if (now > new Date(exam.end_time))
+      throw new Error("Exam has already ended");
 
     let existingAttempt = await ExamAttempt.findOne({
       where: {
@@ -233,6 +235,8 @@ class ExamAttemptsService {
       status: "in_progress",
       score: 0,
     });
+
+    await this.emitExamMonitorUpdate(exam_id);
 
     return {
       attempt_id: attempt.id,
@@ -414,6 +418,8 @@ class ExamAttemptsService {
       score: hasEssayQuestion ? null : finalScore,
       end_time: new Date(),
     });
+
+    await this.emitExamMonitorUpdate(exam_id);
 
     return {
       attempt_id: attempt.id,
@@ -627,7 +633,11 @@ class ExamAttemptsService {
     };
   }
 
-
+  async emitExamMonitorUpdate(exam_id: any) {
+    const io = socket.getIO();
+    console.log(`[SOCKET] Emit exam-monitor:refresh => exam: ${exam_id}`);
+    io.to("monitor").emit("exam-monitor:refresh", { exam_id });
+  }
 }
 
 module.exports = new ExamAttemptsService();
