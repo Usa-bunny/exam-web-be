@@ -1,6 +1,6 @@
 const ExamAttemptsService = require("./examAttempts.service");
 const { successResponse, errorResponse } = require("../../helpers/response");
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 
 interface RequestWithUser extends Request {
   user?: any;
