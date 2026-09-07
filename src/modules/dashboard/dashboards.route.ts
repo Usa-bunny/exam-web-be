@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const DashboardController = require("./dashboard.controller");
+const DashboardController = require("./dashboards.controller");
 const verifyToken = require("../../middlewares/verify-token");
 const checkRole = require("../../middlewares/check-role");
 

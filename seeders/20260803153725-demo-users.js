@@ -10,21 +10,21 @@ module.exports = {
       [
         {
           name: "Admin",
-          email: "admin@example.com",
+          email: "admin@gmail.com",
           password,
           role: "admin",
           created_at: new Date(),
         },
         {
           name: "Sensei",
-          email: "teacher@example.com",
+          email: "teacher@gmail.com",
           password,
           role: "teacher",
           created_at: new Date(),
         },
         {
           name: "Gakusei",
-          email: "student@example.com",
+          email: "student@gmail.com",
           password,
           role: "student",
           created_at: new Date(),

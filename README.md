@@ -19,9 +19,14 @@ cd exam-web-be
 ```env
 PORT=3000
 JWT_SECRET=your_jwt_secret
+
+// set true when you use supabase
+USE_SUPABASE=true
+SUPABASE_URL="use_your_dirrection_connection_string_in_supabase"
 ```
 4. Setup database
 ```bash
+// run when you use local or supabase
 npm run migrate
 npm run seeder
 ```

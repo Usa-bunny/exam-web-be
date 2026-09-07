@@ -1,4 +1,4 @@
-const DashboardsService = require("./dashboard.service");
+const DashboardsService = require("./dashboards.service");
 const { successResponse, errorResponse } = require("../../helpers/response");
 import type { Request, Response } from "express";
 

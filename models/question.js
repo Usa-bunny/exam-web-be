@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       type: {
-        type: DataTypes.ENUM("multiple_choise", "essay"),
+        type: DataTypes.ENUM("multiple_choice", "essay"),
         allowNull: false,
       },
       created_by: {

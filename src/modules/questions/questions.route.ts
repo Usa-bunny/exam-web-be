@@ -4,7 +4,7 @@ const QuestionsController = require("./questions.controller");
 const {
   createQuestionValidator,
   updateQuestionValidator,
-} = require("./question.validator");
+} = require("./questions.validator");
 const validate = require("../../middlewares/validate");
 const verifyToken = require("../../middlewares/verify-token");
 const checkRole = require("../../middlewares/check-role");
