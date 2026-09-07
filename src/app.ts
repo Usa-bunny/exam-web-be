@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("pg");
 
 const express = require("express");
 import type { Express, Request, Response } from "express";
@@ -21,23 +22,17 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-// Setup server untuk Socket.io
 const server = http.createServer(app);
 socket.init(server);
 
-// Hubungkan ke database (dipisah agar tetap jalan di serverless Vercel)
 db.sequelize.authenticate()
   .then(() => console.log("Database Connected"))
   .catch((error: any) => console.error(`Failed connected: ${error.message}`));
 
-// JALANKAN LISTEN HANYA SAAT DI LOKAL
-// Vercel menggunakan environment 'production' dan mengeksekusi app secara serverless
 if (process.env.NODE_ENV !== "production") {
-  // Gunakan server.listen agar Socket.io dan Express berjalan di port yang sama
   server.listen(port, () => {
     console.log(`App listening on http://localhost:${port}`);
   });
 }
 
-// WAJIB UNTUK VERCEL: Ekspor aplikasi Express kamu
 module.exports = app;
