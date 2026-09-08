@@ -112,7 +112,14 @@ class DashboardsService {
     };
   }
 
-  async getTeacherStats(teacherId: any, query: any = {}) {
+  async getTeacherStats(
+    teacherId: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+    },
+  ) {
     const { page, limit, offset } = getPaginationParams(query, 5);
 
     const [
@@ -254,7 +261,7 @@ class DashboardsService {
     };
   }
 
-  async getStudentStats(studentId: any) {
+  async getStudentStats(studentId: number | string) {
     const now = new Date();
 
     const [

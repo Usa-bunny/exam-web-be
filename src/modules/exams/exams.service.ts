@@ -16,7 +16,15 @@ const {
 } = require("../../helpers/pagination");
 
 class ExamsService {
-  async create(data: any) {
+  async create(data: {
+    course_id: number | string;
+    title: string;
+    description: string;
+    duration: number | string;
+    start_time: Date;
+    end_time: Date;
+    created_by: number | string;
+  }) {
     const course = await Course.findByPk(data.course_id);
 
     if (!course) throw new Error("Course not found");
@@ -26,7 +34,15 @@ class ExamsService {
     return await this.getById(newExam.id, data.created_by);
   }
 
-  async getAll(query: any, user_id: any) {
+  async getAll(
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+      course_id?: number | string;
+    },
+    user_id: number | string,
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
     const course_id = query.course_id || null;
@@ -58,7 +74,7 @@ class ExamsService {
     };
   }
 
-  async getById(id: any, user_id: any) {
+  async getById(id: number | string, user_id: number | string) {
     const exam = await Exam.findOne({
       where: {
         id,
@@ -71,7 +87,18 @@ class ExamsService {
     return exam;
   }
 
-  async update(id: any, data: any) {
+  async update(
+    id: number | string,
+    data: {
+      course_id: number | string;
+      title: string;
+      description: string;
+      duration: number | string;
+      start_time: Date;
+      end_time: Date;
+      created_by: number | string;
+    },
+  ) {
     if (data.course_id) {
       const course = await Course.findByPk(data.course_id);
       if (!course) throw new Error("Course not found");
@@ -84,7 +111,7 @@ class ExamsService {
     return exam;
   }
 
-  async delete(id: any, user_id: any) {
+  async delete(id: number | string, user_id: number | string) {
     const exam = await Exam.findOne({
       where: {
         id,
@@ -99,7 +126,11 @@ class ExamsService {
     return true;
   }
 
-  async assignQuestions(exam_id: any, question_ids: any, user_id: any) {
+  async assignQuestions(
+    exam_id: number | string,
+    question_ids: number | string,
+    user_id: number | string,
+  ) {
     if (!Array.isArray(question_ids) || question_ids.length === 0)
       throw new Error("Question IDs must be an array");
 
@@ -143,7 +174,7 @@ class ExamsService {
     };
   }
 
-  async getAssignQuestions(exam_id: any, user_id: any) {
+  async getAssignQuestions(exam_id: number | string, user_id: number | string) {
     const exam = await Exam.findOne({
       where: {
         id: exam_id,
@@ -168,7 +199,22 @@ class ExamsService {
     return exam.questions;
   }
 
-  async getMyExams(query: any, user_id: any) {
+  async getMyExams(
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+      status?:
+        | "berlangsung"
+        | "pending"
+        | "selesai"
+        | "tersedia"
+        | "terlewat"
+        | "mendatang"
+        | "";
+    },
+    user_id: number | string,
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
 
     const search = query.search || "";
@@ -357,7 +403,14 @@ class ExamsService {
     });
   }
 
-  async getExamAttempts(exam_id: any, query: any = {}) {
+  async getExamAttempts(
+    exam_id: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+    } = {},
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
 
     const { rows, count } = await ExamAttempt.findAndCountAll({
@@ -381,7 +434,14 @@ class ExamsService {
     };
   }
 
-  async getExamMonitor(exam_id: any, query: any = {}) {
+  async getExamMonitor(
+    exam_id: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+    } = {},
+  ) {
     const exam = await Exam.findByPk(exam_id, {
       attributes: [
         "id",

@@ -31,7 +31,12 @@ class UsersService {
     return userData;
   }
 
-  async getAll(query: any) {
+  async getAll(query: {
+    page?: number | string;
+    limit?: number | string;
+    search?: string;
+    role?: "admin" | "teacher" | "student";
+  }) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
     const role = query.role || null;
@@ -57,7 +62,7 @@ class UsersService {
     };
   }
 
-  async getById(id: any) {
+  async getById(id: number | string) {
     const user = await User.findByPk(id, {
       attributes: {
         exclude: ["password"],
@@ -69,7 +74,15 @@ class UsersService {
     return user;
   }
 
-  async update(id: any, data: any) {
+  async update(
+    id: number | string,
+    data: {
+      name: string;
+      email: string;
+      password: string;
+      role: "admin" | "teacher" | "student";
+    },
+  ) {
     const user = await User.findByPk(id);
 
     if (!user) throw new Error("User not found");
@@ -77,7 +90,9 @@ class UsersService {
     const updateData = { ...data };
 
     if (data.email && data.email !== user.email) {
-      const existingEmail = await User.findOne({ where: { email: data.email } });
+      const existingEmail = await User.findOne({
+        where: { email: data.email },
+      });
       if (existingEmail) throw new Error("Email Already Used");
     }
 
@@ -92,7 +107,7 @@ class UsersService {
     return userData;
   }
 
-  async delete(id: any) {
+  async delete(id: number | string) {
     const user = await User.findByPk(id);
 
     if (!user) throw new Error("User not found");

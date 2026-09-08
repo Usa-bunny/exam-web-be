@@ -11,10 +11,13 @@ class AuthController {
 
       return successResponse(res, 200, "Login success", result);
     } catch (error: any) {
-      const status = error.message === "Invalid email or password" ? 401 : (error.statusCode || 500);
+      const status =
+        error.message === "Invalid email or password"
+          ? 401
+          : error.statusCode || 500;
       return errorResponse(res, status, error.message, error.errors);
     }
   }
 }
- 
+
 module.exports = new AuthController();

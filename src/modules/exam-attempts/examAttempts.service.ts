@@ -17,7 +17,10 @@ const {
 const socket = require("../../socket");
 
 class ExamAttemptsService {
-  async getExamDetailForStudent(exam_id: any, user_id: any) {
+  async getExamDetailForStudent(
+    exam_id: number | string,
+    user_id: number | string,
+  ) {
     const now = new Date();
 
     const exam = await Exam.findOne({
@@ -147,7 +150,7 @@ class ExamAttemptsService {
     };
   }
 
-  async startExam(exam_id: any, user_id: any) {
+  async startExam(exam_id: number | string, user_id: number | string) {
     const now = new Date();
 
     const exam = await Exam.findOne({
@@ -246,7 +249,15 @@ class ExamAttemptsService {
     };
   }
 
-  async saveAnswer(user_id: any, exam_id: any, bodyData: any) {
+  async saveAnswer(
+    user_id: number | string,
+    exam_id: number | string,
+    bodyData: {
+      question_id: number | string;
+      selected_option_id: number | string;
+      essay_answer: string;
+    },
+  ) {
     let {
       question_id,
       selected_option_id = null,
@@ -337,7 +348,7 @@ class ExamAttemptsService {
     };
   }
 
-  async submitExam(user_id: any, exam_id: any) {
+  async submitExam(user_id: number | string, exam_id: number | string) {
     const attempt = await ExamAttempt.findOne({
       where: {
         exam_id,
@@ -429,7 +440,14 @@ class ExamAttemptsService {
     };
   }
 
-  async getMyAttempts(user_id: any, query: any) {
+  async getMyAttempts(
+    user_id: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+    },
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
 
@@ -475,7 +493,22 @@ class ExamAttemptsService {
     };
   }
 
-  async getAttemptsForTeacher(user_id: any, query: any) {
+  async getAttemptsForTeacher(
+    user_id: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+      status?:
+        | "berlangsung"
+        | "pending"
+        | "selesai"
+        | "tersedia"
+        | "terlewat"
+        | "mendatang"
+        | "";
+    },
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
     const status = query.status || "";
@@ -532,7 +565,7 @@ class ExamAttemptsService {
     };
   }
 
-  async getDetailAttempt(exam_id: any, user_id: any) {
+  async getDetailAttempt(exam_id: number | string, user_id: number | string) {
     const attempt = await ExamAttempt.findOne({
       where: {
         exam_id,
@@ -633,7 +666,7 @@ class ExamAttemptsService {
     };
   }
 
-  async emitExamMonitorUpdate(exam_id: any) {
+  async emitExamMonitorUpdate(exam_id: number | string) {
     const io = socket.getIO();
     console.log(`[SOCKET] Emit exam-monitor:refresh => exam: ${exam_id}`);
     io.to("monitor").emit("exam-monitor:refresh", { exam_id });

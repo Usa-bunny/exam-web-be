@@ -8,11 +8,11 @@ const {
 
 class CoursesService {
   async create(data: {
-    title: any;
-    description: any;
-    created_by: any;
-    teacher_id: any;
-    student_ids: any[];
+    title: string;
+    description: string;
+    created_by: number | string;
+    teacher_id: number | string;
+    student_ids: (number | string)[];
   }) {
     const transaction = await sequelize.transaction();
 
@@ -54,7 +54,7 @@ class CoursesService {
             },
             role: "student",
           },
-          transaction
+          transaction,
         });
 
         if (students.length !== data.student_ids.length)
@@ -83,7 +83,11 @@ class CoursesService {
     }
   }
 
-  async getAll(query: any) {
+  async getAll(query: {
+    page?: number | string;
+    limit?: number | string;
+    search?: string;
+  }) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
 
@@ -137,7 +141,7 @@ class CoursesService {
     };
   }
 
-  async getById(id: any) {
+  async getById(id: number | string) {
     const courses = await Course.findByPk(id, {
       include: [
         {
@@ -176,7 +180,15 @@ class CoursesService {
     };
   }
 
-  async update(id: any, data: any) {
+  async update(
+    id: number | string,
+    data: {
+      title: string;
+      description: string;
+      teacher_id: number | string;
+      student_ids: (number | string)[];
+    },
+  ) {
     const transaction = await sequelize.transaction();
 
     try {
@@ -264,7 +276,7 @@ class CoursesService {
     }
   }
 
-  async delete(id: any) {
+  async delete(id: number | string) {
     const course = await Course.findByPk(id);
 
     if (!course) throw new Error("Course not found");
@@ -274,7 +286,7 @@ class CoursesService {
     return true;
   }
 
-  async getByUserId(user_id: any) {
+  async getByUserId(user_id: number | string) {
     const course = await Course.findAll({
       attributes: ["id", "title", "description"],
       include: [

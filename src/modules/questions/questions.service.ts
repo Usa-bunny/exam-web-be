@@ -6,7 +6,16 @@ const {
 } = require("../../helpers/pagination");
 
 class QuestionsService {
-  async create(data: any) {
+  async create(data: {
+    question_text: string;
+    type: "multiple_choice" | "essay";
+    options: {
+      option_text: string;
+      is_correct?: boolean;
+    }[];
+    course_id: number | string;
+    created_by: number | string;
+  }) {
     const course = await Course.findByPk(data.course_id);
 
     if (!course) throw new Error("Course not found");
@@ -36,7 +45,16 @@ class QuestionsService {
     return await this.getById(newQuestion.id, data.created_by);
   }
 
-  async getByCourseId(course_id: any, query: any, user_id: any) {
+  async getByCourseId(
+    course_id: number | string,
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      search?: string;
+      type?: "multiple_choice" | "essay";
+    },
+    user_id: number | string,
+  ) {
     const { page, limit, offset } = getPaginationParams(query);
     const search = query.search || "";
     const type = query.type || null;
@@ -76,7 +94,7 @@ class QuestionsService {
     };
   }
 
-  async getById(id: any, user_id: any) {
+  async getById(id: number | string, user_id: number | string) {
     const question = await Question.findOne({
       where: {
         id,
@@ -103,7 +121,19 @@ class QuestionsService {
     };
   }
 
-  async update(id: any, data: any) {
+  async update(
+    id: number | string,
+    data: {
+      question_text: string;
+      type: "multiple_choice" | "essay";
+      options: {
+        option_text: string;
+        is_correct?: boolean;
+      }[];
+      course_id: number | string;
+      created_by: number | string;
+    },
+  ) {
     const question = await Question.findOne({
       where: {
         id,
@@ -121,7 +151,7 @@ class QuestionsService {
     const questionType = data.type || question.type;
 
     if (questionType === "essay" && question.type === "multiple_choice") {
-       await QuestionOption.destroy({ where: { question_id: question.id } });
+      await QuestionOption.destroy({ where: { question_id: question.id } });
     }
 
     await question.update({
@@ -151,7 +181,7 @@ class QuestionsService {
     return await this.getById(question.id, data.created_by);
   }
 
-  async delete(id: any, user_id: any) {
+  async delete(id: number | string, user_id: number | string) {
     const question = await Question.findOne({
       where: {
         id,
@@ -163,16 +193,16 @@ class QuestionsService {
 
     const questionOptions = await QuestionOption.findAll({
       where: {
-        question_id: id
-      }
-    })
+        question_id: id,
+      },
+    });
 
-    if (questionOptions.length > 0){
+    if (questionOptions.length > 0) {
       await QuestionOption.destroy({
         where: {
-          question_id: id
-        }
-      })
+          question_id: id,
+        },
+      });
     }
 
     await question.destroy();

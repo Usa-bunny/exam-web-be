@@ -1,7 +1,7 @@
 const { Answer, ExamAttempt, Exam, Question } = require("../../../models");
 
 class AnswersService {
-  async recalculateAttemptScore(attempt_id: any) {
+  async recalculateAttemptScore(attempt_id: number | string) {
     const attempt = await ExamAttempt.findByPk(attempt_id, {
       include: [
         {
@@ -67,10 +67,14 @@ class AnswersService {
     });
   }
 
-  async correctAnswer(answers: any) {
+  async correctAnswer(answers: {
+    id: number | string;
+    is_correct?: boolean;
+    percentage?: number;
+  }) {
     if (!Array.isArray(answers)) throw new Error("Answer must be an array");
 
-    const uniqueAttemptIds = new Set();
+    const uniqueAttemptIds = new Set<number | string>();
     let updateCount = 0;
 
     for (const item of answers) {
@@ -78,7 +82,10 @@ class AnswersService {
 
       const answer = await Answer.findByPk(id);
       if (answer) {
-        let updateData: any = {};
+        let updateData: {
+          is_correct?: boolean;
+          percentage?: number;
+        } = {};
         if (is_correct !== undefined) updateData.is_correct = is_correct;
 
         if (percentage !== undefined) {

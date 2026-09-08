@@ -5,7 +5,7 @@ import type { Request, Response } from "express";
 class AnswersController {
   async correctAnswer(req: Request, res: Response) {
     try {
-      const answers  = req.body.answers;
+      const answers = req.body.answers;
 
       const result = await AnswersService.correctAnswer(answers);
 

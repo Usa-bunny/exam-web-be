@@ -25,7 +25,8 @@ app.get("/", (req: Request, res: Response) => {
 const server = http.createServer(app);
 socket.init(server);
 
-db.sequelize.authenticate()
+db.sequelize
+  .authenticate()
   .then(() => console.log("Database Connected"))
   .catch((error: any) => console.error(`Failed connected: ${error.message}`));
 
