@@ -13,11 +13,17 @@ const localConfig = {
 const supabaseConfig = {
   use_env_variable: 'SUPABASE_URL', 
   dialect: 'postgres',
+  schema: 'exam_web',
+  searchPath: 'exam_web', 
   dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false
-    }
+    },
+    prependSearchPath: true 
+  },
+  define: {
+    schema: 'exam_web' 
   }
 };
 
